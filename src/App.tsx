@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Tasks from "./components/Tasks";
+import "./App.css";
+import Task from "./models/Task";
+import NewTask from "./components/NewTask";
 
 function App() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const addTaskHandler = (task: string) => {
+    const newTask = new Task(task);
+
+    setTasks((prev) => {
+      return prev.concat(newTask);
+    });
+    
+  };
+
+  const onDeleteTaskHandler = (id: string) => {
+    setTasks((prev) => {
+      return prev.filter((todo) => todo.id !== id);
+    });
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NewTask onAddTask={addTaskHandler}></NewTask>
+      <Tasks onDeleteTask={onDeleteTaskHandler} items={tasks} />
     </div>
   );
 }
