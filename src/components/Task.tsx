@@ -1,11 +1,15 @@
 // import task from "../models/Task";
 // import { idText } from "typescript";
-import classes from "./Task.module.css";
-const Task: React.FC<{ text: string; onDeleteTask: () => void }> = (props) => {
+import classes from "./Task.module.css"
+interface Props {
+  text: string
+  onDeleteTask: () => void
+}
+const Task = ({ text, onDeleteTask }: Props) => {
   return (
-    <li className={classes.item} onClick={props.onDeleteTask}>
-      {props.text}
+    <li className={classes.item} onClick={onDeleteTask}>
+      {text}
     </li>
-  );
-};
-export default Task;
+  )
+}
+export default Task

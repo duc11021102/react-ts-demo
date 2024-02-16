@@ -1,22 +1,27 @@
-import { useRef } from "react"
-import classes from './NewTask.module.css';
-const NewTask:React.FC<{onAddTask: (text: string) => void}> = (props) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    const onSubmitHandler = (event: React.FormEvent) => {
-        event.preventDefault();
-        const taskEntered = inputRef.current!.value;
-        if(taskEntered.trim().length === 0){
-            return;
-        }
-
-        props.onAddTask(taskEntered);
-    }
-
-    return <form onSubmit={onSubmitHandler} className={classes.form} >
-        <label htmlFor="text">New Task</label>
-        <input id="text" type="text" ref={inputRef}></input>
-        <button>Add</button>
-    </form>
+import classes from "./NewTask.module.css"
+import { useForm } from "react-hook-form"
+export interface task {
+  text: string
 }
-export default NewTask;
+interface Props {
+  onAddTask: (data: task) => void
+}
+
+const NewTask = ({ onAddTask }: Props) => {
+  const { register, handleSubmit, reset } = useForm()
+
+  const submit = (data: any) => {
+    // event.preventDefault()
+    onAddTask(data)
+    reset()
+  }
+
+  return (
+    <form onSubmit={handleSubmit(submit)} className={classes.form}>
+      <label htmlFor="text">New Task</label>
+      <input {...register("text", { required: true, maxLength: 20 })}></input>
+      <button>Add</button>
+    </form>
+  )
+}
+export default NewTask
